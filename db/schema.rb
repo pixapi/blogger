@@ -11,30 +11,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170205212609) do
+ActiveRecord::Schema.define(version: 20170205225213) do
 
-  create_table "articles", force: true do |t|
-    t.string   "title"
+  create_table "articles", force: :cascade do |t|
+    t.string   "title",              limit: 255
     t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
+    t.string   "image_file_name",    limit: 255
+    t.string   "image_content_type", limit: 255
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
   end
 
-  create_table "comments", force: true do |t|
-    t.string   "author_name"
+  create_table "authors", force: :cascade do |t|
+    t.string   "username",         null: false
+    t.string   "email",            null: false
+    t.string   "crypted_password", null: false
+    t.string   "salt",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "authors", ["email"], name: "index_authors_on_email", unique: true
+
+  create_table "comments", force: :cascade do |t|
+    t.string   "author_name", limit: 255
     t.text     "body"
     t.integer  "article_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   add_index "comments", ["article_id"], name: "index_comments_on_article_id"
 
-  create_table "taggings", force: true do |t|
+  create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id"
     t.integer  "article_id"
     t.datetime "created_at"
@@ -44,8 +55,8 @@ ActiveRecord::Schema.define(version: 20170205212609) do
   add_index "taggings", ["article_id"], name: "index_taggings_on_article_id"
   add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id"
 
-  create_table "tags", force: true do |t|
-    t.string   "name"
+  create_table "tags", force: :cascade do |t|
+    t.string   "name",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end

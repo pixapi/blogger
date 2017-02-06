@@ -3,6 +3,8 @@ class ArticlesController < ApplicationController
     @articles = Article.all
   end
 
+before_filter :require_login, except: [:show]
+
   def new
     @article = Article.new
   end
